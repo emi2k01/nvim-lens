@@ -1,22 +1,6 @@
+import { ColorschemeWithPreview, Config, Plugin } from "@/types";
 import { readFile } from "fs/promises";
 import path from "path";
-
-export type Config = {
-  plugins: Plugin[];
-};
-
-export type Plugin = {
-  id: string;
-  url: string;
-  name: string;
-  colorschemes: string[];
-};
-
-export type ColorschemeWithPreview = {
-  name: string;
-  plugin: Plugin;
-  previewHtml: string;
-};
 
 const PLUGINS_OUT_DIR = process.env.PLUGINS_OUT_DIR!;
 const CONFIG_PATH = process.env.CONFIG_PATH!;

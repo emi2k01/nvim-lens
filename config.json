@@ -3,6 +3,7 @@
     {
       "id": "io.github.shaunsingh.nord-nvim",
       "url": "shaunsingh/nord.nvim",
+      "fullUrl": "https://github.com/shaunsingh/nord.nvim",
       "name": "nord.nvim",
       "colorschemes": [
         "nord"
@@ -11,6 +12,7 @@
     {
       "id": "io.github.folke.tokyonight-nvim",
       "url": "folke/tokyonight.nvim",
+      "fullUrl": "https://github.com/folke/tokyonight.nvim",
       "name": "tokyonight.nvim",
       "colorschemes": [
         "tokyonight",

@@ -1,16 +1,12 @@
+import { Plugin } from "@/types";
+import { cn } from "@/util/cn";
+import { getConfig } from "@/util/config";
 import { readdir, readFile } from "fs/promises";
 import { GetStaticPropsContext } from "next";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import path from "path";
 import React from "react";
-
-type Config = {
-  plugins: {
-    id: string;
-    url: string;
-    name: string;
-    colorschemes: string[];
-  }[];
-};
 
 type Screen = {
   name: string;
@@ -22,16 +18,12 @@ type ColorschemeShow = {
   screens: Screen[];
 };
 
-const PLUGINS_OUT_DIR = process.env.PLUGINS_OUT_DIR!;
-const CONFIG_PATH = process.env.CONFIG_PATH!;
-let _config: Config | undefined;
+type PluginPageProps = {
+  colorschemeShows: ColorschemeShow[];
+  plugin: Plugin;
+};
 
-async function getConfig(): Promise<Config> {
-  if (!_config) {
-    _config = JSON.parse(await readFile(CONFIG_PATH, "utf8"));
-  }
-  return _config!;
-}
+const PLUGINS_OUT_DIR = process.env.PLUGINS_OUT_DIR!;
 
 export async function getStaticProps(context: GetStaticPropsContext) {
   const { pluginId } = context.params as { pluginId: string };
@@ -56,9 +48,11 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     });
   }
 
+  const config = await getConfig();
   return {
     props: {
       colorschemeShows,
+      plugin: config.plugins.find((plugin) => plugin.id === pluginId)!,
     },
   };
 }
@@ -75,17 +69,17 @@ export async function getStaticPaths() {
   };
 }
 
-type PluginProps = {
-  colorschemeShows: ColorschemeShow[];
-};
-
-export default function Plugin(props: PluginProps) {
+export default function PluginPage(props: PluginPageProps) {
+  const router = useRouter();
   const [selectedShow, setSelectedShow] = React.useState<ColorschemeShow>(
-    props.colorschemeShows[0]
+    () =>
+      props.colorschemeShows.find(
+        (cs) => cs.name === router.query.colorscheme
+      ) ?? props.colorschemeShows[0]
   );
 
   return (
-    <div className="flex items-start gap-x-4 py-12">
+    <div className="flex items-start gap-x-4 py-6">
       <div className="flex flex-col gap-y-4">
         {selectedShow.screens.map((screen) => (
           <div key={screen.name} className="rounded-md overflow-hidden">
@@ -93,16 +87,26 @@ export default function Plugin(props: PluginProps) {
             <div
               className="rounded-md border border-white overflow-hidden mt-1"
               dangerouslySetInnerHTML={{ __html: screen.html }}
-            ></div>
+            />
           </div>
         ))}
       </div>
-      <ul className="flex flex-col gap-y-2 sticky top-12">
+      <ul className="flex flex-col gap-y-2 sticky top-6">
+        <Link href={props.plugin.fullUrl} className="underline font-medium">
+          {props.plugin.url}
+        </Link>
         {props.colorschemeShows.map((show) => (
           <li key={show.name}>
             <button
-              className="px-4 py-2 bg-slate-600 rounded w-full"
-              onClick={() => setSelectedShow(show)}
+              className={cn(
+                "px-4 py-2 bg-slate-700 rounded w-full",
+                selectedShow === show && "bg-slate-100 text-slate-800"
+              )}
+              onClick={() => {
+                router.query.colorscheme = show.name;
+                router.replace(router, "", { shallow: true });
+                setSelectedShow(show);
+              }}
             >
               {show.name}
             </button>

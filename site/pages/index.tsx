@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ColorschemeWithPreview, getColorschemesWithPreview } from "../util";
+import { ColorschemeWithPreview } from "@/types";
+import { getColorschemesWithPreview } from "@/util/config";
 
 type HomeProps = {
   colorschemesWithPreview: ColorschemeWithPreview[];
@@ -16,9 +17,12 @@ export async function getStaticProps() {
 
 export default function Home(props: HomeProps) {
   return (
-    <div className="flex flex-wrap gap-4 py-12">
+    <div className="flex flex-wrap gap-4 py-6">
       {props.colorschemesWithPreview.map((cs, i) => (
-        <Link href={cs.plugin.id} key={i}>
+        <Link
+          href={{ pathname: cs.plugin.id, query: { colorscheme: cs.name } }}
+          key={i}
+        >
           <div className="text-[0.25rem] hover:scale-[1.8] hover:shadow-md rounded-md overflow-hidden transition-all">
             <div dangerouslySetInnerHTML={{ __html: cs.previewHtml }} />
           </div>
