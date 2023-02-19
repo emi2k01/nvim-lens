@@ -1,0 +1,24 @@
+{
+  "plugins": [
+    {
+      "id": "io.github.shaunsingh.nord-nvim",
+      "url": "shaunsingh/nord.nvim",
+      "name": "nord.nvim",
+      "colorschemes": [
+        "nord"
+      ]
+    },
+    {
+      "id": "io.github.folke.tokyonight-nvim",
+      "url": "folke/tokyonight.nvim",
+      "name": "tokyonight.nvim",
+      "colorschemes": [
+        "tokyonight",
+        "tokyonight-night",
+        "tokyonight-storm",
+        "tokyonight-day",
+        "tokyonight-moon"
+      ]
+    }
+  ]
+}

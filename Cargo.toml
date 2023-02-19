@@ -1,0 +1,15 @@
+[package]
+name = "nvim-lens"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+alacritty_terminal = "0.17.0"
+bpaf = "0.7.8"
+dotenvy = "0.15.6"
+include_dir = "0.7.3"
+libc = "0.2.139"
+serde = { version = "1.0.152", features = ["derive"] }
+serde_json = "1.0.93"
+tracing = "0.1.37"
+tracing-subscriber = { version = "0.3.16", features = ["ansi", "env-filter"] }

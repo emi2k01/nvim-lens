@@ -1,0 +1,18 @@
+@font-face {
+  font-family: "Monospace";
+  src: url("/monospace.ttf");
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:where(pre) {
+    font-size: 14px;
+    line-height: 1;
+}
+
+:where(pre span) {
+    font-family: "Monospace";
+    line-height: 1.5;
+    display: inline-block;
+}
