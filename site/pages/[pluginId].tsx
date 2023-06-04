@@ -72,11 +72,19 @@ export async function getStaticPaths() {
 export default function PluginPage(props: PluginPageProps) {
   const router = useRouter();
   const [selectedShow, setSelectedShow] = React.useState<ColorschemeShow>(
-    () =>
-      props.colorschemeShows.find(
-        (cs) => cs.name === router.query.colorscheme
-      ) ?? props.colorschemeShows[0]
+    props.colorschemeShows[0]
   );
+
+  if (
+    router.query.colorscheme != null &&
+    router.query.colorscheme !== selectedShow.name
+  ) {
+    setSelectedShow(
+      props.colorschemeShows.find(
+        (show) => show.name === router.query.colorscheme
+      )!
+    );
+  }
 
   return (
     <div className="flex items-start gap-x-4 py-6">
@@ -100,11 +108,21 @@ export default function PluginPage(props: PluginPageProps) {
             <button
               className={cn(
                 "px-4 py-2 bg-slate-700 rounded w-full",
-                selectedShow === show && "bg-slate-100 text-slate-800"
+                selectedShow.name === show.name && "bg-slate-100 text-slate-800"
               )}
               onClick={() => {
-                router.query.colorscheme = show.name;
-                router.replace(router, "", { shallow: true });
+                router.replace(
+                  {
+                    query: {
+                      ...router.query,
+                      colorscheme: show.name,
+                    },
+                  },
+                  undefined,
+                  {
+                    shallow: true,
+                  }
+                );
                 setSelectedShow(show);
               }}
             >

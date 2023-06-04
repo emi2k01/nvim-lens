@@ -133,6 +133,7 @@ fn main() {
         .with_env_filter(EnvFilter::from_default_env())
         .init();
     dotenvy::dotenv().unwrap();
+    color_eyre::install().unwrap();
     let args = args::parse();
     let config = config::load(Path::new(&args.config));
     nvim::setup(&config.plugins);

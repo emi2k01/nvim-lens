@@ -4,6 +4,8 @@ use std::{
     process::{Child, Command, Stdio},
 };
 
+use eyre::WrapErr;
+
 use crate::{config::Plugin, COLUMNS, LINES, SAMPLES_EXTRACTION_PATH};
 
 static CONFIG_DIR: &str = "/tmp/nvim/config";
@@ -127,11 +129,16 @@ require("lazy").setup({plugins_object})
     );
     // setup init.lua
     std::fs::create_dir_all(CONFIG_DIR).unwrap();
+    let init_lua = Path::new(CONFIG_DIR).join("nvim").join("init.lua");
+    std::fs::create_dir(init_lua.parent().unwrap())
+        .wrap_err("failed to create `nvim` directory")
+        .unwrap();
     let mut init_lua = std::fs::OpenOptions::new()
         .write(true)
         .create(true)
         .truncate(true)
-        .open(Path::new(CONFIG_DIR).join("nvim").join("init.lua"))
+        .open(&init_lua)
+        .wrap_err_with(|| format!("failed to open {init_lua:?}"))
         .unwrap();
     init_lua.write_all(lazy_bootstrap.as_bytes()).unwrap();
 

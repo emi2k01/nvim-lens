@@ -23,8 +23,11 @@ export default function Home(props: HomeProps) {
           href={{ pathname: cs.plugin.id, query: { colorscheme: cs.name } }}
           key={i}
         >
-          <div className="text-[0.25rem] hover:scale-[1.8] hover:shadow-md rounded-md overflow-hidden transition-all">
-            <div dangerouslySetInnerHTML={{ __html: cs.previewHtml }} />
+          <div className="text-[0.25rem] rounded-md overflow-hidden">
+            <div
+              dangerouslySetInnerHTML={{ __html: cs.previewHtml }}
+              className="hover:scale-[1.25] transition-all"
+            />
           </div>
           <p className="text-slate-500 text-sm mt-2 flex items-center justify-between">
             <span className="font-medium">{cs.name}</span>
